@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Crawler</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px; /* 고정 폭 설정 */
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* 패딩 포함하여 폭 계산 */
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px; /* 버튼과 입력 필드 사이의 여백 추가 */
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Web Crawler</h1>
+        <form id="crawler-form">
+            <label for="url">URL(주소) :</label>
+            <input type="text" id="url" name="url" placeholder="Enter URL" />
+            
+            <label for="tag">Tag(지정할 HTML 태그) :</label>
+            <input type="text" id="tag" name="tag" placeholder="Enter Tag" />
+            
+            <label for="type">클래스 여부 :</label>
+            <input type="text" id="type" name="type" placeholder="Enter Type" />
+            
+            <label for="how">엑셀 또는 데이터베이스 :</label>
+            <input type="text" id="how" name="how" placeholder="Enter Storage Method" />
+            
+            <button type="submit">Start Crawling</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('crawler-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // 폼의 기본 제출 동작 방지
+
+            // 폼 데이터 가져오기
+            const url = document.getElementById('url').value;
+            const tag = document.getElementById('tag').value;
+            const type = document.getElementById('type').value;
+            const how = document.getElementById('how').value;
+
+            // JSON 데이터 생성
+            const data = {
+                url: url,
+                tag: tag,
+                type: type,
+                how: how
+            };
+
+            // AJAX 요청 보내기
+            fetch('/crawl', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
